@@ -19,3 +19,24 @@ show tables;
 desc tbl_filme;
 
 select * from tbl_filme;
+
+
+use db_controle_filmes_ab;
+
+create table tbl_genero(
+	id 				int not null primary key auto_increment,
+    genero 			varchar(60) not null
+
+);
+
+desc tbl_genero;
+
+select * from tbl_genero;
+
+
+create table tbl_premiacao(
+	id 				int not null primary key auto_increment,
+    nome 			varchar(80) not null,
+    tipo 			varchar(80) not null
+
+);

@@ -6,30 +6,35 @@
  ****************************************************************/
 
  //import da biblioteca do prisma
- const { PrismaClient } = require('@prisma/cliente')
+ const {PrismaClient} = require('@prisma/client')
 
- const insertFilme = async function (){
+
+ const prisma = new PrismaClient()
+
+ const insertFilme = async function (filme){
+    try{
 
     //criar um objeto a ser utilizado a biblioteca do prisma/client
-        const prisma = new PrismaClient()
 
-        let sql = `insert int tbl_filme (nome,
+        let sql = `insert into tbl_filme (nome,
                                         duracao,
                                         sinopse,
                                         data_lancamento,
                                         foto_capa,
-                                        link_trailer
-           
+                                        link_trailer,
+                                        id_classificacao
+
                                         )
 
                                         values
                                         (
-                                            ${filme.nome},
-                                            ${filme.duracao},
-                                            ${filme.sinopse},
-                                            ${filme.data_lancamento},.66
-                                            ${filme.foto_capa},
-                                            ${filme.link.trailer},
+                                            '${filme.nome}',
+                                            '${filme.duracao}',
+                                            '${filme.sinopse}',
+                                            '${filme.data_lancamento}',
+                                            '${filme.foto_capa}',
+                                            '${filme.link_trailer}',
+                                            '${filme.id_classificacao}'
                                             
                                         )`
 
@@ -39,21 +44,80 @@
         return true
         else
         return false
+    }catch(error){
+        return false
+    }
+
+    }
+
+ 
+
+ const updateFilme = async function(filme){
+    try {
+        let sql  = `update tbl_filme set nome               = '${filme.nome}',
+                                        duracao             = '${filme.duracao}',
+                                        sinopse             = '${filme.sinopse}',
+                                        data_lancamento     = '${filme.data_lancamento}',
+                                        foto_capa           = '${filme.foto_capa}', 
+                                        link_trailer        = '${filme.link_trailer}',
+                                        id_classificacao    = '${filme.id_classificacao}'
+                                        where id = ${filme.id}`
+
+        let resultFilme = await prisma.$executeRawUnsafe(sql)
+        
+        if(resultFilme)
+            return true
+        else
+        return false
+    } catch (error) {
+        return false
+    }
  }
 
- const updateFilme = async function(){
+const deleteFilme = async function (id){
+    try{
+        let sql  = `delete from tbl_filme where id = ${id}`
 
- }
-
-const deleteFilme = async function (){
-
+        let result = await prisma.$executeRawUnsafe(sql)
+        if (result)
+        return true
+        else
+        return false
+    }catch(error){
+        return false
+    }
 }
 
 const selectAllFilme = async function (){
+    try{
 
+        
+        let sql = 'select * from tbl_filme order by id desc'
+        let result = await prisma.$queryRawUnsafe(sql)
+
+        if(result)
+        return result
+        else
+        return false
+    }catch(error){
+        return false
+    }
 }
 
-const selectByIdFilme = async function (){
+const selectByIdFilme = async function (id){
+
+    try{
+        let sql  = `select * from tbl_filme where id = ${id}`
+
+        let result = await prisma.$queryRawUnsafe(sql)
+
+        if (result)
+        return result
+        else
+        return false
+    }catch(error){
+        return false
+    }
 
 }
 
