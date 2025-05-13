@@ -90,10 +90,10 @@ const selectAllClassificacao = async function(){
     }
 }
 
-const selectByIdClassificacao = async function (id){
+const selectByIdClassificacao = async function (id_classificacao){
 
     try{
-        let sql  = `select * from tbl_classificacao where id = ${id}`
+        let sql  = `select * from tbl_classificacao where id_classificacao = ${id_classificacao}`
 
         let result = await prisma.$queryRawUnsafe(sql)
 
