@@ -132,7 +132,7 @@ const listarClassificacao = async function(){
                 dadosclassificacao.status = true
                 dadosclassificacao.status_code = 200
                 dadosclassificacao.items = resultClassificacao.length
-                dadosclassificacao.films = resultClassificacao
+                dadosclassificacao.classificacao = resultClassificacao
 
                 return dadosclassificacao
             }else{

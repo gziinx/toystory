@@ -147,19 +147,20 @@ const listarFilme = async function(){
                
                 for(const itemFilme of resultFilme){
                   //Busca os dados da classificação na controller de classificacao
-                  let dadosClassificacao = await controllerClassificacao.buscarClassificacao(itemFilme.id_classificacao)
+                  let dadosClassificacao = await controllerClassificacao.buscarClassificacao(itemFilme.id)
                   
                   //Adiciona um atributo classificação no JSON de filmes e coloca os dados da classificação
                   itemFilme.classificacao = dadosClassificacao.classificacao
                   
                   //Remover um atributo do JSON
-                  
+                  delete itemFilme.id_classificacao
+
                   //Adiciona em um novo array o JSON de filmes com a sua nova estrutura de dados
                   arrayFilmes.push(itemFilme)
 
               }
               
-              dadosFilme.films = arrayFilmes
+              dadosFilme.classificacao = arrayFilmes
 
               return dadosFilme
 
