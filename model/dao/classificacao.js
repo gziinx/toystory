@@ -12,31 +12,23 @@
  const prisma = new PrismaClient()
 
  const insertClassificacao = async function (classificacao){
-    try{
-
-    //criar um objeto a ser utilizado a biblioteca do prisma/client
-
-        let sql = `insert into tbl_classificacao (idade_minima,
-                                          link_icon
-                                        )
-
-                                        values
-                                        (
-                                            '${classificacao.idade_minima}',
-                                            '${classificacao.link_icon}'
-                                           )`
+    try {
+        let sql = `insert into tbl_classificacao (
+                        idade_minima,
+                        link_icon
+                   ) values (
+                        ${parseInt(classificacao.idade_minima)},
+                        '${classificacao.link_icon}'
+                   )`
 
         let result = await prisma.$executeRawUnsafe(sql)
 
-        if (result)
-        return true
-        else
-        return false
-    }catch(error){
+        return result ? true : false
+    } catch(error) {
+        console.error(error) // <---- LOG DO ERRO AJUDA
         return false
     }
-
-    }
+}
 
  
 
@@ -44,7 +36,7 @@
     try {
         let sql  = `update tbl_classificacao set idade_minima               = '${classificacao.idade_minima}',
                                              link_icon             = '${classificacao.link_icon}'
-                                        where id            = ${classificacao.id}`
+                                        where id_classificacao           = ${classificacao.id}`
 
         let resultClassificacao = await prisma.$executeRawUnsafe(sql)
         

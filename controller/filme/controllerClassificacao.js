@@ -4,38 +4,37 @@
  * autor: gustavo
  * versao: 1.0
  ******************************************************************/
-const message = require('../../modulo/config.js')
+const message = require('../../../toystory/modulo/config.js')
 
-const generoDAO = require('../../model/dao/classificacao.js')
+const  classificacaoDAO = require('../../../toystory/model/dao/classificacao.js')
 
 //inserir um genero no dao
- const inserirClassificacao = async function(genero, contentType){
-    try {
-        let response = {}
-
-        if(String(contentType).toLowerCase() == 'application/json')
-        {
-            if (genero.idade_minima        == ''               || genero.idade_minima                    == undefined || genero.idade_minima             == null || genero.idade_minima .length > 2 ||
+const inserirClassificacao = async function(genero, contentType){
+  try {
+      if(String(contentType).toLowerCase() == 'application/json')
+      {
+              if (genero.idade_minima        == ''               || genero.idade_minima                    == undefined || genero.idade_minima             == null || genero.idade_minima .length > 2 ||
                 genero.link_icon        == ''               || genero.link_icon                    == undefined || genero.link_icon         == null || genero.link_icon .length > 200
-                            
+              )
+              {
+                  return message.ERROR_REQUIRED_FIELDS //400
+              }else{
+                  //Chama a função para inserir no BD e aguarda o retorno da função
+                  let resultClassificacao = await classificacaoDAO.insertClassificacao(genero)
 
-         ){
-            return message.ERROR_REQUIRED_FIELDS //erro 400
-        }else{
-            let resultGenero = await generoDAO.insertClassificacao(genero)
-            if(resultGenero)
-                return message.SUCESS_CREATED_ITEM //201
-                else
-                return message.ERROR_INTERNAL_SERVER //500
-        }
-    }else{
-        return message.ERROR_CONTENT_TYPE //415
-    }
-    }catch(error){
-        return message.ERROR_INTERNAL_SERVER_CONTROLLER //500
-    }
-        
- }
+                  if(resultClassificacao)
+                      return message.SUCESS_CREATED_ITEM//201
+                  else
+                      return message.ERROR_INTERNAL_SERVER_MODEL //500
+              }
+      }else{
+          return message.ERROR_CONTENT_TYPE //415
+      }
+  } catch (error) {
+      return message.ERROR_INTERNAL_SERVER_CONTROLLER //500
+  }
+}
+
 
 //atualizar um filme no dao
 const atualizarClassificacao = async function(id, genero, contentType) {
@@ -46,14 +45,14 @@ const atualizarClassificacao = async function(id, genero, contentType) {
         {
 
       if (  id      == ''            || id == undefined                    || id ==  null                   || isNaN(id) || id <= 0                      ||
-      genero.idade_minima        == ''               || genero.idade_minima                    == undefined || genero.idade_minima             == null || genero.idade_minima .length > 2 ||
+      genero.idade_minima        == ''               || genero.idade_minima                    == undefined || genero.idade_minima             == null || genero.idade_minima .length > 5 ||
       genero.link_icon        == ''               || genero.link_icon                   == undefined || genero.link_icon         == null || genero.link_icon .length > 200
      ) 
      {
         return message.ERROR_REQUIRED_FIELDS // 400   
       } else {
      //Validação para verificar se o ID existe no BD
-     let resultGenero = await generoDAO.selectByIdClassificacao(parseInt(id))
+     let resultGenero = await classificacaoDAO.selectByIdClassificacao(parseInt(id))
     
      if(resultGenero != false || typeof(resultGenero) == 'object'){
       if(resultGenero.length > 0 ){
@@ -61,7 +60,7 @@ const atualizarClassificacao = async function(id, genero, contentType) {
         //Adiciona o ID do filme no JSON com os dados
           genero.id = parseInt(id)
           
-         let result = await generoDAO.updateClassificacao(genero)
+         let result = await classificacaoDAO.updateClassificacao(genero)
     
          if(result){
           return message.SUCESS_UPDATED_ITEM
@@ -94,12 +93,12 @@ const atualizarClassificacao = async function(id, genero, contentType) {
             ){
           return message.ERROR_REQUIRED_FIELDS //400
         }else{
-          let resultGenero = await generoDAO.selectByIdClassificacao(parseInt(id))
+          let resultGenero = await classificacaoDAO.selectByIdClassificacao(parseInt(id))
     
           if(resultGenero != false || typeof(resultGenero) == 'object'){
             if(resultGenero.length > 0){
               //Delete
-              let result = await generoDAO.deleteClassificacao(parseInt(id))
+              let result = await classificacaoDAO.deleteClassificacao(parseInt(id))
     
               if(result){
                 return message.SUCESS_DELETED_ITEM // 200
@@ -125,7 +124,7 @@ const listarClassificacao = async function(){
         //Objeto do tipo JSON
         let dadosclassificacao = {}
         //Chama a função para retornar os classificacaos cadastrados
-        let resultClassificacao = await generoDAO.selectAllClassificacao()
+        let resultClassificacao = await classificacaoDAO.selectAllClassificacao()
 
         if(resultClassificacao != false || typeof(resultClassificacao) == 'object'){
             if(resultClassificacao.length > 0){

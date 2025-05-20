@@ -34,9 +34,9 @@ desc tbl_genero;
 select * from tbl_genero;
 
 
-create table tbl_premiacao(
+create table tbl_classificacao(
 	id 				int not null primary key auto_increment,
-    nome 			varchar(80) not null,
-    tipo 			varchar(80) not null
+    idade_minima 			varchar(45) not null,
+    link_icon 			varchar(300) not null
 
 );

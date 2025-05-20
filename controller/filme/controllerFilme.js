@@ -34,7 +34,7 @@ const controllerClassificacao = require ('../filme/controllerClassificacao.js')
             if(resultFilme)
                 return message.SUCESS_CREATED_ITEM //201
                 else
-                return message.ERROR_INTERNAL_SERVER //500
+                return message.ERROR_INTERNAL_SERVER_MODEL //500
         }
     }else{
         return message.ERROR_CONTENT_TYPE //415
@@ -92,7 +92,7 @@ const atualizarFilme = async function(id, filme, contentType) {
         return message.ERROR_CONTENT_TYPE // 415
       }
       } catch (error) {
-      
+      return message.ERROR_INTERNAL_SERVER_CONTROLLER
     }
     
     
@@ -153,7 +153,6 @@ const listarFilme = async function(){
                   itemFilme.classificacao = dadosClassificacao.classificacao
                   
                   //Remover um atributo do JSON
-                  delete itemFilme.id_classificacao
                   
                   //Adiciona em um novo array o JSON de filmes com a sua nova estrutura de dados
                   arrayFilmes.push(itemFilme)
